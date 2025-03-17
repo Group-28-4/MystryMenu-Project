@@ -1,3 +1,5 @@
+/* Recipe Management*/
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -62,10 +64,11 @@ header {
     position: absolute;
     right: 40px; /* Position icons next to the login/signup buttons */
     display: flex;
+    cursor: pointer; 
     gap: 40px;
     font-size: 30px;
     color: #000;
-    cursor: pointer;
+
     
 }
 
@@ -95,39 +98,66 @@ header {
     cursor: pointer;
 }
 .recipes {
-    flex: 1; /* Takes up the remaining space */
-    overflow-y: auto; /* Makes only this section scrollable */
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 20px;
-    padding: 10px;
-    margin-bottom: 30px;
-    margin-left: 320px;
-}
-.recipes::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Edge */
-}
-
-.recipes {
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    margin-left: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto; 
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
 }
 
 .recipe {
-    text-align: center;
-    display: inline-flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    margin-bottom: 15px;
 }
 
 .recipe p {
-    margin-top: 70px;
-    font-size: 16px;
+    margin: 0 !important;
+    margin-right: auto !important;
+    font-size: 18px;
     font-weight: bold;
-    margin-left: 30px;
-    margin-right: 30px;
 }
+.recipe img {
+    width: 80px !important;
+    height: 80px !important;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 20px !important;
+}
+.view-btn, .delete-btn {
+    margin-top: 0 !important;
+    height: 40px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+    background-color: rgb(7, 7, 7);
+    color: #fff;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.delete-btn:hover{
+    background-color: red;
+}
+.view-btn {
+    margin-right: 10px !important;
+}
+
 
 .user{
     font-size: 33px;
+
+}
+.view-btn:hover{
+    background-color: rgb(113, 98, 243);
 }
 .header-icons i:hover {
     background-color: rgba(200, 200, 200, 0.5); /* Change to the desired color */
@@ -146,40 +176,9 @@ header {
     position: relative;
     
 }
-.delete-btn {
-    height: 40px; /* Explicitly define the height */
-    padding: 10px 20px; /* Adjust padding for horizontal space */
-    margin-left: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 30px;
-    background-color: rgb(7, 7, 7);
-    color: #fff;
-    font-size: 16px;
-    margin-top: 60px;
-}
-.delete-btn:hover{
-    background-color: red;
-}
-.view-btn {
-    height: 40px; /* Explicitly define the height */
-    padding: 10px 20px; /* Adjust padding for horizontal space */
-    margin-left: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 30px;
-    background-color: rgb(7, 7, 7);
-    color: #fff;
-    font-size: 16px;
-    margin-top: 60px;
-    margin-right: 30px;
-}
-.view-btn:hover{
-    background-color: rgb(113, 98, 243);
-}
 
 .admin p {
-    margin-left: 935px;
+    margin-left: 945px;
     margin-top: 10px;
     margin-bottom: 20px;
     font-weight: bold;
@@ -240,4 +239,7 @@ header {
     border-radius: 50%;
     object-fit: cover;
     display: block;
+    text-align: center; /* Align icon horizontally */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    position: relative;
 }
