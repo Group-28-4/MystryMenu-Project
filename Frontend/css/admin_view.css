@@ -1,3 +1,5 @@
+/* Recipe Management*/
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -113,7 +115,7 @@ header {
     padding: 15px;
     border-radius: 8px;
     width: 80%;
-    max-width: 800px;
+    max-width: 600px;
     margin-bottom: 15px;
 }
 
