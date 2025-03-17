@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'db.php';
-
+header('content-Type:application/json');
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
     exit;

@@ -42,6 +42,8 @@
             </header>
             <div class="recipe-name">
                 <p></p>
+ 
+                <span class="recipe-creator">By <span id="recipe-creator-name"></span></span>
             </div>
             <div class="view">
                 <section class="recipe-details">
@@ -147,6 +149,14 @@
                         const recipe = data.recipe;
                         
                         document.querySelector('.recipe-name p').textContent = recipe.name;
+                        
+                        // Display creator's name if available
+                        if (recipe.firstName && recipe.lastName) {
+                            document.getElementById('recipe-creator-name').textContent = 
+                                `${recipe.firstName} ${recipe.lastName}`;
+                        } else {
+                            document.getElementById('recipe-creator-name').textContent = 'Unknown user';
+                        }
                         
                         const recipeImage = document.querySelector('.recipe-details img');
                         recipeImage.src = recipe.image ? '../../backend' + recipe.image : '../image/recipe4.jpeg';

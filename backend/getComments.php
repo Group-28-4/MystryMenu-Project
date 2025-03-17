@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'db.php';
-
+header('content-Type:application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['recipe_id'])) {
         echo json_encode([

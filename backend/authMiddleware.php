@@ -29,8 +29,18 @@ function checkUserType($allowedTypes = []) {
 if (basename($_SERVER['PHP_SELF']) === 'authMiddleware.php') {
     header('Content-Type: application/json');
     if (isset($_SESSION['user_type'])) {
-        echo json_encode(['user_type' => $_SESSION['user_type']]);
-    } else {
+        $allowedPages = [];
+        foreach ($protectedPages as $page => $types) {
+            if (in_array($_SESSION['user_type'], $types)) {
+                $allowedPages[] = $page;
+            }
+        }
+
+        echo json_encode([
+            'user_type' => $_SESSION['user_type'],
+            'allowedPages' => $allowedPages
+        ]);
+    }  else {
         http_response_code(401);
         echo json_encode(['error' => 'Not authorized']);
     }

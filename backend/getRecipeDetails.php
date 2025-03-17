@@ -1,6 +1,7 @@
 <?php
 require 'db.php';
 session_start();
+header('content-type:application/json');
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
@@ -14,8 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $stmt = $pdo->prepare("
                 SELECT r.*,
                        (SELECT COUNT(*) FROM hearts WHERE recipe_id = r.recipe_id) as hearts,
-                       EXISTS(SELECT 1 FROM hearts WHERE user_id = ? AND recipe_id = r.recipe_id) as hasHearted
+                       EXISTS(SELECT 1 FROM hearts WHERE user_id = ? AND recipe_id = r.recipe_id) as hasHearted,
+                       u.firstName,
+                       u.lastName
                 FROM recipe r 
+                LEFT JOIN Users u ON r.user_id = u.id
                 WHERE r.recipe_id = ?
             ");
             $stmt->execute([$_SESSION['user_id'], $_GET['id']]);
@@ -25,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 echo json_encode([
                     'status' => 'success',
                     'recipe' => $recipe,
+                    'creatorName' => $recipe['firstName'] . ' ' . $recipe['lastName'],
                     'hasHearted' => (bool)$recipe['hasHearted'],
                     'hearts' => (int)$recipe['hearts']
                 ]);

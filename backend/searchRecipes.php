@@ -2,6 +2,8 @@
 session_start();
 require 'db.php';
 
+header('content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $searchTerm = $_GET['query'] ?? '';
     $isProfile = isset($_GET['isProfile']) ? filter_var($_GET['isProfile'], FILTER_VALIDATE_BOOLEAN) : false;
