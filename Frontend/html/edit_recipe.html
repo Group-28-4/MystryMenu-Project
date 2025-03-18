@@ -158,9 +158,7 @@
                                 document.getElementById('warningMessage').textContent = 'This recipe contains the following poisonous ingredients:';
                                 document.getElementById('poisonousIngredientsList').textContent = poisonousIngredients.join(', ');
                                 document.getElementById('warningPopup').style.display = 'flex';
-                                
-                                // Also show a toast notification
-                                showToast('Warning: This recipe contains poisonous ingredients', 'error');
+                        
                             }
                         } else {
                             showToast('Recipe not found', 'error');
