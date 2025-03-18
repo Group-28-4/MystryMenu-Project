@@ -12,7 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $searchTerm = "%$searchTerm%";
         
-        if ($isProfile === true) {
+        // if the user is logged in session
+        $isLoggedIn = isset($_SESSION['user_id']);
+        
+        if ($isLoggedIn && $isProfile === true) {
             $stmt = $pdo->prepare("
                 SELECT recipe_id, name, image, type, user_id 
                 FROM recipe 
@@ -20,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 AND (name LIKE ? OR ingredient LIKE ? OR type LIKE ?)
             ");
             $stmt->execute([$_SESSION['user_id'], $searchTerm, $searchTerm, $searchTerm]);
-        } else if ($isSavedRecipes === true) {
+        } else if ($isLoggedIn && $isSavedRecipes === true) {
             $stmt = $pdo->prepare("
                 SELECT r.recipe_id, r.name, r.image, r.type, r.user_id 
                 FROM recipe r
@@ -30,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             ");
             $stmt->execute([$_SESSION['user_id'], $searchTerm, $searchTerm, $searchTerm]);
         } else {
+            // This gives for users and visitors
             $stmt = $pdo->prepare("
                 SELECT recipe_id, name, image, type, user_id 
                 FROM recipe 
@@ -45,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode([
             'status' => 'success',
             'recipes' => $recipes,
-            'user_id' => $_SESSION['user_id']
+            'user_id' => $isLoggedIn ? $_SESSION['user_id'] : null
         ]);
     } catch (PDOException $e) {
         echo json_encode([

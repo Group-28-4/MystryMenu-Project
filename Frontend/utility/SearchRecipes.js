@@ -9,6 +9,10 @@ function searchRecipes(searchTerm, isProfile = false, isSavedRecipes = false) {
                 data.recipes.forEach(recipe => {
                     const recipeElement = document.createElement('div');
                     recipeElement.className = 'recipe';
+                    
+                    // if the user is on main html
+                    const isVisitor = window.location.pathname.includes('main.html');
+                    
                     if (isProfile) {
                         recipeElement.innerHTML = `
                             <img src="${recipe.image ? '../../backend' + recipe.image : '../image/recipe1.jpeg'}" 
@@ -23,7 +27,22 @@ function searchRecipes(searchTerm, isProfile = false, isSavedRecipes = false) {
                                 <span style="font-weight: bold;">${recipe.name}</span>
                             </div>
                         `;
+                    } else if (isVisitor) {
+                        // For visitors that come to main html
+                        recipeElement.innerHTML = `
+                            <img src="${recipe.image ? '../../backend' + recipe.image : '../image/recipe1.jpeg'}" 
+                                 alt="${recipe.name}"
+                                 onclick="window.location.href='recipe_view.html?id=${recipe.recipe_id}'"
+                                 style="cursor: pointer;"
+                                 onerror="this.src='../image/recipe1.jpeg'">
+                            <div class="recipe-info">
+                            <i class="fas fa-share-alt share-icon" onclick="shareRecipe(${recipe.recipe_id})"></i>
+                                <span onclick="window.location.href='recipe_view.html?id=${recipe.recipe_id}'" 
+                                      style="cursor: pointer; font-weight: bold;">${recipe.name}</span>
+                            </div>
+                        `;
                     } else {
+                        // For users
                         recipeElement.innerHTML = `
                             <img src="${recipe.image ? '../../backend' + recipe.image : '../image/recipe1.jpeg'}" 
                                  alt="${recipe.name}"

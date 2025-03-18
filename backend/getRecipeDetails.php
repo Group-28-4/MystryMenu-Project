@@ -4,6 +4,7 @@ session_start();
 header('content-type:application/json');
 
 if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
     exit;
 }
