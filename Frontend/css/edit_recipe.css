@@ -38,7 +38,7 @@ body {
     margin-left: 200px;
 }
 .heading h2 {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     color: #333;
     margin: 0;
@@ -221,7 +221,6 @@ label[for="changereciInput"] {
 .ingredient-highlight {
     border-color: #cc0000 !important;
 }
-
 .form-tip {
     display: block;
     color: #666;
