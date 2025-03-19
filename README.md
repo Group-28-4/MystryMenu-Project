@@ -60,7 +60,7 @@ Database server (MySQL)
  
 Code Editor(Visual Code, Notepad)
 
-PHP, HTML, CSS, Java Script(AJAX)
+PHP, HTML, CSS, Java Script
 
 
 **Steps to run the application**
