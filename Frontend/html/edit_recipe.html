@@ -47,7 +47,8 @@
                     </div>
                     <div class="ingre">
                         <label for="ingredient">Ingredient</label>
-                        <textarea id="ingredient" name="ingredient" placeholder="Enter ingredients" required></textarea>
+                        <textarea id="ingredient" name="ingredient" placeholder="Enter ingredients separated by commas" required></textarea>
+                        <small class="form-tip">Please separate each ingredient with a comma (e.g., "2 cups flour, 1 cup sugar, 3 eggs")</small>
                     </div>
                     <div class="meth">
                         <label for="method">Method</label>
@@ -127,7 +128,7 @@
                 });
         }
         
-        // Function to load poisonous recipe details
+        // load poisonous recipes
         function loadPoisonousRecipe(recipeId) {
             fetch('../../backend/getPoisonousRecipes.php')
                 .then(response => response.json())
@@ -213,7 +214,7 @@
             checkForm.append('type', document.getElementById('type').value);
             checkForm.append('ingredient', ingredient);
             checkForm.append('method', document.getElementById('method').value);
-            checkForm.append('check_only', 'true'); // Add flag to prevent recipe creation
+            checkForm.append('check_only', 'true'); 
             
             try {
                 const checkResponse = await fetch('../../backend/addRecipe.php', {
@@ -279,7 +280,6 @@
                     
                     // For poisonous recipes, check if there are still poisonous ingredients
                     if (isEditingPoisonousRecipe && data.poisonousIngredients && data.poisonousIngredients.length > 0) {
-                        // Update the warning with new list of poisonous ingredients
                         document.getElementById('poisonousIngredientsList').textContent = data.poisonousIngredients.join(', ');
                         document.getElementById('warningPopup').style.display = 'flex';
                         document.getElementById('ingredient').classList.add('ingredient-highlight');
@@ -293,7 +293,6 @@
                             window.location.href = 'poisonousRecipes.html';
                         }, 2000);
                     } else {
-                        // For standard recipes
                         setTimeout(() => {
                             window.location.href = 'profile.html';
                         }, 2000);

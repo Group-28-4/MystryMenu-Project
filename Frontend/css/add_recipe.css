@@ -255,3 +255,11 @@ input[type="file"] {
 #warningModal #continueAnyway:hover {
     background-color: #c82333;
 }
+
+.form-tip {
+    display: block;
+    color: #666;
+    font-size: 12px;
+    margin-top: 5px;
+    font-style: italic;
+}

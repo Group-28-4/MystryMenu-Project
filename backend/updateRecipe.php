@@ -124,19 +124,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $poisonousStmt->execute();
             $allPoisonousIngredients = $poisonousStmt->fetchAll(PDO::FETCH_COLUMN);
             
-            // Check if ingredients contain poisonous ones
+            // Temporarily replace commas inside parentheses with ### characters
             $modifiedIngredient = preg_replace_callback('/\([^)]+\)/', function($matches) {
                 return str_replace(',', '###', $matches[0]);
             }, $ingredient);
             
-            $ingredients = array_map(function($item) {
+            // Replace and, or with commas to get them as separate ingredients
+            $modifiedIngredient = preg_replace('/ and | or /i', ',', $modifiedIngredient);
+            
+            // Split by commas and restore the original commas
+            $userIngredients = array_map(function($item) {
                 return str_replace('###', ',', trim($item));
             }, explode(',', $modifiedIngredient));
             
-            foreach ($ingredients as $userIngredient) {
+            // to avoid duplicates
+            $processedIngredients = [];
+            
+            // Check each ingredient with the database list
+            foreach ($userIngredients as $userIngredient) {
+                $cleanUserIngredient = trim($userIngredient);
+                
+                // Skip empty ingredients or ones we've already processed
+                if (empty($cleanUserIngredient) || in_array($cleanUserIngredient, $processedIngredients)) {
+                    continue;
+                }
+                
+                $processedIngredients[] = $cleanUserIngredient;
+                
                 foreach ($allPoisonousIngredients as $poisonousIngredient) {
-                    if (strcasecmp(trim($userIngredient), trim($poisonousIngredient)) === 0) {
-                        $poisonousIngredients[] = $poisonousIngredient;
+                    // Check for exact match or if poisonous ingredient in the recipe
+                    if (strcasecmp($cleanUserIngredient, trim($poisonousIngredient)) === 0 || 
+                        stripos($cleanUserIngredient, trim($poisonousIngredient)) !== false) {
+                        // Only add if not already in the list
+                        if (!in_array($poisonousIngredient, $poisonousIngredients)) {
+                            $poisonousIngredients[] = $poisonousIngredient;
+                            error_log("Match found - User: '$cleanUserIngredient' DB: '$poisonousIngredient'");
+                        }
                         break;
                     }
                 }

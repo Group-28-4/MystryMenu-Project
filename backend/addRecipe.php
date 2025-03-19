@@ -6,7 +6,7 @@ checkUserType(['admin', 'user']);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     
-    // Check if only checking for poisonous ingredients (for edit_recipe.html)
+    // Check poisonous ingredients (for edit_recipe.html)
     $checkOnly = isset($_POST['check_only']) && $_POST['check_only'] === 'true';
     
     // Retrieve form data
@@ -88,25 +88,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $modifiedIngredient = preg_replace_callback('/\([^)]+\)/', function($matches) {
             return str_replace(',', '###', $matches[0]);
         }, $ingredient);
+        
+        // Replace and , or with commas to treat them as separate ingredients
+        $modifiedIngredient = preg_replace('/ and | or /i', ',', $modifiedIngredient);
 
-        // split by commas and restore the original commas
+        // Split by commas and restore the original commas
         $userIngredients = array_map(function($item) {
             return str_replace('###', ',', trim($item));
         }, explode(',', $modifiedIngredient));
         
-        // to see how it happens logs
-        error_log("Original ingredient string: " . $ingredient);
-        error_log("Modified ingredient string: " . $modifiedIngredient);
-        error_log("Split ingredients: " . print_r($userIngredients, true));
+        // to avoid duplicates
+        $processedIngredients = [];
         
         // Check each ingredient with the database list
         foreach ($userIngredients as $userIngredient) {
             $cleanUserIngredient = trim($userIngredient);
             
+            // Skip empty ingredients or ones we've already processed
+            if (empty($cleanUserIngredient) || in_array($cleanUserIngredient, $processedIngredients)) {
+                continue;
+            }
+            
+            $processedIngredients[] = $cleanUserIngredient;
+            
             foreach ($dbPoisonousIngredients as $dbIngredient) {
-                if (strcasecmp($cleanUserIngredient, trim($dbIngredient)) === 0) {
-                    $poisonousIngredients[] = $dbIngredient;
-                    error_log("Match found - User: '$cleanUserIngredient' DB: '$dbIngredient'");
+                // Check for exact match or if poisonous ingredient is contained within user ingredient
+                if (strcasecmp($cleanUserIngredient, trim($dbIngredient)) === 0 || 
+                    stripos($cleanUserIngredient, trim($dbIngredient)) !== false) {
+                    // add if not already in the list
+                    if (!in_array($dbIngredient, $poisonousIngredients)) {
+                        $poisonousIngredients[] = $dbIngredient;
+                        error_log("Match found - User: '$cleanUserIngredient' DB: '$dbIngredient'");
+                    }
                     break;
                 }
             }
@@ -114,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if (!empty($poisonousIngredients)) {
             $isPoisonous = true;
-            // Only show warning if not overriding
+            // show warning if not overriding
             if (!$isOverride) {
                 echo json_encode([
                     'success' => false,

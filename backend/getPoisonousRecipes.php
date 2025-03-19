@@ -34,17 +34,36 @@ try { // Get all poisonous recipes
             return str_replace(',', '###', $matches[0]);
         }, $recipe['ingredient']);
         
+        // Replace and , or with commas to treat them as separate ingredients
+        $modifiedIngredient = preg_replace('/ and | or /i', ',', $modifiedIngredient);
+        
         // Split by commas and restore original commas
         $ingredients = array_map(function($item) {
             return str_replace('###', ',', trim($item));
         }, explode(',', $modifiedIngredient));
         
-        // Check each ingredient with the poisonous ingredients table 
+        // to avoid duplicates
+        $processedIngredients = [];
+        
+        // Check each ingredient with the poisonous ingredients table
         foreach ($ingredients as $ingredient) {
             $cleanIngredient = trim($ingredient);
+            
+            // Skip empty ingredients or ones we've already processed
+            if (empty($cleanIngredient) || in_array($cleanIngredient, $processedIngredients)) {
+                continue;
+            }
+            
+            $processedIngredients[] = $cleanIngredient;
+            
             foreach ($dbPoisonousIngredients as $poisonousIngredient) {
-                if (strcasecmp($cleanIngredient, trim($poisonousIngredient)) === 0) {
-                    $recipe['poisonous_ingredients'][] = $cleanIngredient;
+                // Check for exact match or if poisonous ingredient is contained within user ingredient
+                if (strcasecmp($cleanIngredient, trim($poisonousIngredient)) === 0 || 
+                    stripos($cleanIngredient, trim($poisonousIngredient)) !== false) {
+                    // Only add if not already in the list
+                    if (!in_array($poisonousIngredient, $recipe['poisonous_ingredients'])) {
+                        $recipe['poisonous_ingredients'][] = $poisonousIngredient;
+                    }
                     break;
                 }
             }

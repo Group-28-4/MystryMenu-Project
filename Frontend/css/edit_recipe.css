@@ -221,3 +221,10 @@ label[for="changereciInput"] {
 .ingredient-highlight {
     border-color: #cc0000 !important;
 }
+.form-tip {
+    display: block;
+    color: #666;
+    font-size: 12px;
+    margin-top: -20px;
+    margin-bottom: 5px;
+}
