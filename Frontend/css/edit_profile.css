@@ -137,10 +137,15 @@ select{
     border-radius: 4px;
     color: #fff;
     cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
+
 
 .cancel-btn {
     background-color: #ff4d4d;
+    margin-left: 130px;
+    
 }
 
 .edit-btn {
