@@ -1,6 +1,6 @@
-```mermaid
+::: mermaid
 erDiagram
-    User {
+    Users {
         INT user_id PK
         VARCHAR firstName
         VARCHAR lastName
@@ -34,9 +34,37 @@ erDiagram
         INT user_id FK
         timestamp saved_at
     }
+
+    Hearts {
+        INT user_id FK
+        INT recipe_id FK
+    }
+
+    PoisonousIngredients {
+        INT id PK
+        VARCHAR name
+        TEXT description
+    }
+
+    PoisonousRecipes {
+        INT poisonous_recipe_id PK
+        VARCHAR name
+        VARCHAR type
+        TEXT ingredient
+        TEXT method
+        VARCHAR image
+        UUID user_id FK
+        enum poisonous "yes, no, unknown"
+        enum status "pending, approved, rejected"
+    }
+
     
-    User ||--o{ Comments : "can give"
-    User ||--o{ SaveRecipe : "can save"
-    User ||--o{ Recipe : "create"
+    Users ||--o{ Comments : "can give"
+    Users ||--o{ SaveRecipe : "can save"
+    Users ||--o{ Recipe : "create"
     Recipe ||--o{ Comments : "can have"
     Recipe ||--o{ SaveRecipe : "can be saved"
+    Recipe ||--o{ Hearts : "can have"
+    Recipe ||--o{ PoisonousRecipes : "can be in"
+    PoisonousIngredients ||--o{ PoisonousRecipes : "can be in"
+:::

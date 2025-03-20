@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'recipe';
+$dbname = 'mystrymenu';
 $username = 'root';
 $password = '';
 
