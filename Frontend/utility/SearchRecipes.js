@@ -20,11 +20,11 @@ function searchRecipes(searchTerm, isProfile = false, isSavedRecipes = false) {
                                  onclick="viewRecipe(${recipe.recipe_id})"
                                  style="cursor: pointer;"
                                  onerror="this.src='../image/recipe1.jpeg'">
-                            <div class="recipe-details">
+                            <div class="recipe-details"><br>
+                                <span style="font-weight: bold;">${recipe.name}</span><br><br>
                                 <i class="fas fa-edit edit-icon" onclick="editRecipe(${recipe.recipe_id})"></i>
                                 <i class="fas fa-share-alt share-icon" onclick="shareRecipe(${recipe.recipe_id})"></i>
                                 <i class="fas fa-trash-alt delete-icon" onclick="deleteRecipe(${recipe.recipe_id})"></i>
-                                <span style="font-weight: bold;">${recipe.name}</span>
                             </div>
                         `;
                     } else if (isVisitor) {

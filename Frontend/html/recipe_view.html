@@ -182,6 +182,9 @@
 
     function formatMethod(method) {
         return method.split('\n')
+            .filter(step => step.trim())
+            .map(step => `<p>${step.trim()}</p>`)
+            .join('');
     }
 
     function showToast(message, type = 'error') {
