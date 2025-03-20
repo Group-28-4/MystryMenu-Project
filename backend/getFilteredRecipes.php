@@ -9,7 +9,7 @@ try {
         $stmt = $pdo->prepare("
             SELECT recipe_id, name, image, type, ingredient, method 
             FROM recipe 
-            WHERE LENGTH(ingredient) - LENGTH(REPLACE(ingredient, ',', '')) < 4
+            WHERE LENGTH(ingredient) - LENGTH(REPLACE(ingredient, ',', '')) < 5
         ");
         $stmt->execute();
     } else if ($type === 'all') {
